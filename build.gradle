@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+}
+
+group 'com.gufli.dbeantools'
+version '1.0-SNAPSHOT'
+
+compileJava {
+    sourceCompatibility = 1.17
+    targetCompatibility = 1.17
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+
+    sourceCompatibility = 1.17
+    targetCompatibility = 1.17
+
+    group = this.group;
+    version = this.version;
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation 'javax.persistence:javax.persistence-api:2.2'
+    }
+
+    publishing {
+        repositories {
+            maven {
+                name = "Jorisg"
+                url = uri("https://repo.jorisg.com/snapshots")
+                credentials(org.gradle.api.credentials.PasswordCredentials)
+            }
+        }
+
+        publications {
+            release(MavenPublication) {
+                from components.java
+                groupId = rootProject.group
+                artifactId = project.name
+                version = rootProject.version
+            }
+        }
+    }
+}

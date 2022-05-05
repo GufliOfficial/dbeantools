@@ -1,0 +1,6 @@
+rootProject.name = 'dbeantools'
+
+include 'api'
+include 'minestom'
+include 'bukkit'
+
