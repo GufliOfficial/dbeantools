@@ -1,22 +1,27 @@
-# BrickEbean
+# dbeantools
 
-A library for integrating [EBean](https://ebean.io/) in [Minestom](https://github.com/Minestom/Minestom).
+A library for integrating [EBean](https://ebean.io/) easily in java extensions.
 
 ## API
 
-### Maven
+### Gradle
 ```
 repositories {
     maven { url "https://repo.jorisg.com/snapshots" }
 }
 ```
 
+## Bukkit / Spigot / Paper
+
 ```
 dependencies {
-    implementation 'org.minestombrick.ebean:api:1.0-SNAPSHOT'
+    implementation 'com.gufli.dbeantools:bukkit:1.0-SNAPSHOT'
 }
 ```
 
-### Usage
-
-Check the [javadocs](https://minestombrick.github.io/BrickEbean/)
+## Minestom
+```
+dependencies {
+    implementation 'com.gufli.dbeantools:minestom:1.0-SNAPSHOT'
+}
+```

@@ -1,6 +1,6 @@
 package com.gufli.dbeantools.api.context;
 
-import com.google.gson.JsonObject;
+import com.gufli.dbeantools.api.BaseModel;
 import io.ebean.DB;
 import io.ebean.DatabaseFactory;
 import io.ebean.Transaction;
@@ -10,7 +10,6 @@ import io.ebean.datasource.DataSourceFactory;
 import io.ebean.datasource.DataSourcePool;
 import io.ebean.migration.MigrationConfig;
 import io.ebean.migration.MigrationRunner;
-import com.gufli.dbeantools.api.BaseModel;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -37,10 +36,6 @@ public abstract class AbstractDatabaseContext implements DatabaseContext {
         } finally {
             Thread.currentThread().setContextClassLoader(originalContextClassLoader);
         }
-    }
-
-    public final void init(JsonObject config) throws SQLException {
-        init(config.get("dsn").getAsString(), config.get("username").getAsString(), config.get("password").getAsString());
     }
 
     public final void init(String dsn, String username, String password) throws SQLException {
