@@ -38,31 +38,40 @@ public abstract class AbstractDatabaseContext implements DatabaseContext {
         }
     }
 
-    public final void init(String dsn, String username, String password) throws SQLException {
-        init(dsn, username, password, "migrations");
+    public final void init(com.gufli.dbeantools.api.DatabaseConfig config) throws SQLException {
+        init(config.dsn, config.username, config.password, config.driver);
     }
 
-    public final void init(String dsn, String username, String password, String migrationsPath) throws SQLException {
+    public final void init(String dsn, String username, String password) throws SQLException {
+        init(dsn, username, password, null);
+    }
+
+    public final void init(String dsn, String username, String password, String driver) throws SQLException {
+        init(dsn, username, password, driver, "migrations");
+    }
+
+    public final void init(String dsn, String username, String password, String driver, String migrationsPath) throws SQLException {
         if ( pool != null ) {
             throw new IllegalStateException("This context has already been initialized.");
         }
 
-        initInternal(dsn, username, password, migrationsPath);
+        initInternal(dsn, username, password, driver, migrationsPath);
     }
 
-    private void initInternal(String dsn, String username, String password, String migrationsPath) throws SQLException {
+    private void initInternal(String dsn, String username, String password, String driver, String migrationsPath) throws SQLException {
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
         dataSourceConfig.setUrl(dsn);
         dataSourceConfig.setUsername(username);
         dataSourceConfig.setPassword(password);
 
-        String driver;
-        if (dsn.startsWith("jdbc:h2")) {
-            driver = "org.h2.Driver";
-        } else if (dsn.startsWith("jdbc:mysql")) {
-            driver = "com.mysql.cj.jdbc.Driver";
-        } else {
-            throw new IllegalArgumentException("Invalid dsn, driver not available");
+        if ( driver == null ) {
+            if (dsn.startsWith("jdbc:h2")) {
+                driver = "org.h2.Driver";
+            } else if (dsn.startsWith("jdbc:mysql")) {
+                driver = "com.mysql.cj.jdbc.Driver";
+            } else {
+                throw new IllegalArgumentException("Cannot detect driver for the given dsn.");
+            }
         }
 
         try {
