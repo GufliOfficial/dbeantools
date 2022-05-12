@@ -70,7 +70,7 @@ public class DatabaseContextTests {
     @Test
     @Order(2)
     public void initializeDatabase() throws Exception {
-        databaseContext.init("jdbc:h2:mem:migrationdb;", "dbuser", "",
+        databaseContext.init("jdbc:h2:mem:migrationdb;", "dbuser", "", null,
                 "filesystem:" + tempdir.toPath().resolve("migrations"));
 
         try (
