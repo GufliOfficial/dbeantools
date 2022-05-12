@@ -11,17 +11,12 @@ repositories {
 }
 ```
 
-## Bukkit / Spigot / Paper
-
 ```
 dependencies {
-    implementation 'com.gufli.dbeantools:bukkit:1.0-SNAPSHOT'
-}
-```
-
-## Minestom
-```
-dependencies {
-    implementation 'com.gufli.dbeantools:minestom:1.0-SNAPSHOT'
+    // minestom
+    implementation 'com.gufli.dbeantools:minestom-api:1.0-SNAPSHOT'
+    
+    // spigot
+    implementation 'com.gufli.dbeantools:spigot-api:1.0-SNAPSHOT'
 }
 ```

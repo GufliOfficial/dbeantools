@@ -1,14 +1,10 @@
 package com.gufli.dbeantools.api;
 
+import com.gufli.dbeantools.api.context.AbstractDatabaseContext;
+import com.gufli.dbeantools.api.migration.MigrationGenerator;
 import io.ebean.annotation.Platform;
 import io.ebean.config.DatabaseConfig;
 import org.junit.jupiter.api.*;
-import com.gufli.dbeantools.api.context.AbstractDatabaseContext;
-import com.gufli.dbeantools.api.converters.ColorConverter;
-import com.gufli.dbeantools.api.converters.ItemStackConverter;
-import com.gufli.dbeantools.api.converters.NBTCompoundConverter;
-import com.gufli.dbeantools.api.converters.PosConverter;
-import com.gufli.dbeantools.api.migration.MigrationGenerator;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,11 +26,7 @@ public class DatabaseContextTests {
     @BeforeAll
     public static void init() {
         classes.add(TestBean.class);
-        classes.add(ColorConverter.class);
-        classes.add(ItemStackConverter.class);
-        classes.add(NBTCompoundConverter.class);
-        classes.add(PosConverter.class);
-        
+
         databaseContext = new AbstractDatabaseContext("TestDatabase") {
             @Override
             protected void buildConfig(DatabaseConfig config) {
