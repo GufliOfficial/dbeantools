@@ -1,4 +1,4 @@
-package com.gufli.dbeantools.minestom.converters;
+package com.gufli.dbeantools.adventure.converters;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;

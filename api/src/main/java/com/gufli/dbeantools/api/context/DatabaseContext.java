@@ -2,6 +2,7 @@ package com.gufli.dbeantools.api.context;
 
 
 import com.gufli.dbeantools.api.BaseModel;
+import io.ebean.Database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,6 +14,16 @@ public interface DatabaseContext {
     void shutdown();
 
     Connection getConnection() throws SQLException;
+
+    String dataSourceName();
+
+    Class<?>[] classes();
+
+    void migrate() throws  SQLException;
+
+    void migrate(String migrationsPath) throws SQLException;
+
+    Database database();
 
     // UTILS
 

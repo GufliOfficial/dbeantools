@@ -1,0 +1,6 @@
+dependencies {
+    api project(':api')
+
+    compileOnly 'net.kyori:adventure-api:+'
+    compileOnly 'net.kyori:adventure-text-serializer-gson:+'
+}

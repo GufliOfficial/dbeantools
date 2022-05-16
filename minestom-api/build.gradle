@@ -3,7 +3,8 @@ repositories {
 }
 
 dependencies {
-    implementation project(':api')
+    api project(':api')
+    api project(':adventure-api')
 
     compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
 }

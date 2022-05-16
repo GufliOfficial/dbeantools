@@ -8,7 +8,6 @@ import io.ebean.datasource.DataSourceConfig;
 import io.ebean.dbmigration.DbMigration;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,16 +18,23 @@ public class MigrationGenerator {
 
     private final List<Class<?>> classes = new ArrayList<>();
 
-    public MigrationGenerator(String dataSourceName, Path resourcePath, Platform... platforms) {
+    public MigrationGenerator(String dataSourceName, String resourcePath, Platform... platforms) {
         this.dataSourceName = dataSourceName;
 
         this.dbMigration = DbMigration.create();
-        this.dbMigration.setPathToResources(resourcePath.toString());
         this.dbMigration.setMigrationPath("migrations");
+
+        if ( resourcePath != null ) {
+            this.dbMigration.setPathToResources(resourcePath);
+        }
 
         for ( Platform platform : platforms ) {
             this.dbMigration.addPlatform(platform);
         }
+    }
+
+    public MigrationGenerator(String dataSourceName, Platform... platforms) {
+        this(dataSourceName, null, platforms);
     }
 
     public void addClass(Class<?> clazz) {
@@ -50,9 +56,13 @@ public class MigrationGenerator {
 
         // create database
         Database database = DatabaseFactory.create(config);
-        dbMigration.setServer(database);
 
-        // generate migrations
+        // generate
+        generate(database);
+    }
+
+    public void generate(Database database) throws IOException {
+        dbMigration.setServer(database);
         dbMigration.generateMigration();
     }
 

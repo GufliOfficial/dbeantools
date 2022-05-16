@@ -29,8 +29,8 @@ public class DatabaseContextTests {
 
         databaseContext = new AbstractDatabaseContext("TestDatabase") {
             @Override
-            protected void buildConfig(DatabaseConfig config) {
-                classes.forEach(config::addClass);
+            public Class<?>[] classes() {
+                return classes.toArray(Class[]::new);
             }
         };
 
@@ -58,7 +58,7 @@ public class DatabaseContextTests {
     @Order(1)
     public void generateMigrationFiles() throws IOException {
         MigrationGenerator generator = new MigrationGenerator("TestDatabase",
-                tempdir.toPath(), Platform.H2);
+                tempdir.toPath().toString(), Platform.H2);
         classes.forEach(generator::addClass);
         generator.generate();
 
@@ -70,9 +70,8 @@ public class DatabaseContextTests {
     @Test
     @Order(2)
     public void initializeDatabase() throws Exception {
-        databaseContext.init("jdbc:h2:mem:migrationdb;", "dbuser", "", null,
-                "filesystem:" + tempdir.toPath().resolve("migrations"));
-
+        databaseContext.init("jdbc:h2:mem:migrationdb;", "dbuser", "", null);
+        databaseContext.migrate("filesystem:" + tempdir.toPath().resolve("migrations"));
         try (
                 Connection conn = databaseContext.getConnection();
                 ResultSet rs = conn.prepareStatement("SELECT COUNT(*) FROM db_migration").executeQuery()

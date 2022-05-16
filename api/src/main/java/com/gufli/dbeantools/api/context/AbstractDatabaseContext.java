@@ -2,6 +2,7 @@ package com.gufli.dbeantools.api.context;
 
 import com.gufli.dbeantools.api.BaseModel;
 import io.ebean.DB;
+import io.ebean.Database;
 import io.ebean.DatabaseFactory;
 import io.ebean.Transaction;
 import io.ebean.config.DatabaseConfig;
@@ -22,6 +23,7 @@ public abstract class AbstractDatabaseContext implements DatabaseContext {
 
     private final String dataSourceName;
     private DataSourcePool pool;
+    private Database database;
 
     public AbstractDatabaseContext(String dataSourceName) {
         this.dataSourceName = dataSourceName;
@@ -47,18 +49,14 @@ public abstract class AbstractDatabaseContext implements DatabaseContext {
     }
 
     public final void init(String dsn, String username, String password, String driver) throws SQLException {
-        init(dsn, username, password, driver, "migrations");
-    }
-
-    public final void init(String dsn, String username, String password, String driver, String migrationsPath) throws SQLException {
         if ( pool != null ) {
             throw new IllegalStateException("This context has already been initialized.");
         }
 
-        initInternal(dsn, username, password, driver, migrationsPath);
+        initInternal(dsn, username, password, driver);
     }
 
-    private void initInternal(String dsn, String username, String password, String driver, String migrationsPath) throws SQLException {
+    private void initInternal(String dsn, String username, String password, String driver) throws SQLException {
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
         dataSourceConfig.setUrl(dsn);
         dataSourceConfig.setUsername(username);
@@ -82,8 +80,20 @@ public abstract class AbstractDatabaseContext implements DatabaseContext {
         }
 
         pool = DataSourceFactory.create(dataSourceName, dataSourceConfig);
-        migrate(pool, migrationsPath);
         connect(pool);
+    }
+
+    @Override
+    public void migrate() throws SQLException {
+        migrate("migrations");
+    }
+
+    @Override
+    public final void migrate(String migrationsPath) throws SQLException {
+        if ( pool == null ) {
+            throw new IllegalStateException("Database context has not been initialized.");
+        }
+        migrate(this.pool, migrationsPath);
     }
 
     private void migrate(DataSourcePool pool, String migrationsPath) throws SQLException {
@@ -104,7 +114,8 @@ public abstract class AbstractDatabaseContext implements DatabaseContext {
         config.setDefaultServer(false);
         config.setName(dataSourceName);
         buildConfig(config);
-        DatabaseFactory.create(config);
+
+        this.database = DatabaseFactory.create(config);
     }
 
     public final void shutdown() {
@@ -113,14 +124,29 @@ public abstract class AbstractDatabaseContext implements DatabaseContext {
         }
     }
 
-    public Connection getConnection() throws SQLException {
+    public final Connection getConnection() throws SQLException {
+        if ( pool == null ) {
+            throw new IllegalStateException("Database context has not been initialized.");
+        }
         return pool.getConnection();
     }
 
-    /**
-     * Override this to add the required bean classes and converters to this database
-     */
-    protected abstract void buildConfig(DatabaseConfig config);
+    @Override
+    public final String dataSourceName() {
+        return dataSourceName;
+    }
+
+    @Override
+    public abstract Class<?>[] classes();
+
+    @Override
+    public Database database() {
+        return database;
+    }
+
+    protected void buildConfig(DatabaseConfig config) {
+        Arrays.stream(classes()).forEach(config::addClass);
+    }
 
     // UTILS
 

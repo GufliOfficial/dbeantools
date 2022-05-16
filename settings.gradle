@@ -3,4 +3,5 @@ rootProject.name = 'dbeantools'
 include 'api'
 include 'minestom-api'
 include 'spigot-api'
+include 'adventure-api'
 
