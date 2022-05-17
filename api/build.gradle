@@ -19,9 +19,6 @@ dependencies {
 
     // TEST
 
-    testRuntimeOnly 'io.ebean:ebean-platform-mysql:13.+'
-    testRuntimeOnly 'mysql:mysql-connector-java:8.+'
-
     // h2 database platform
     testRuntimeOnly 'com.h2database:h2:2.+'
     testRuntimeOnly 'io.ebean:ebean-platform-h2:13.+'
