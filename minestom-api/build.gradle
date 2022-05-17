@@ -6,5 +6,6 @@ dependencies {
     api project(':api')
     api project(':adventure-api')
 
+    // platform dependency is provided
     compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
 }

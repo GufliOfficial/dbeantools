@@ -1,6 +1,11 @@
+
+
 dependencies {
     api project(':api')
 
+    // required for this library
+    implementation 'net.kyori:adventure-text-serializer-gson:+'
+
+    // platform dependency is provided
     compileOnly 'net.kyori:adventure-api:+'
-    compileOnly 'net.kyori:adventure-text-serializer-gson:+'
 }

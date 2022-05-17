@@ -1,17 +1,16 @@
 package com.gufli.dbeantools.api;
 
 import com.gufli.dbeantools.api.context.AbstractDatabaseContext;
-import com.gufli.dbeantools.api.migration.MigrationGenerator;
+import com.gufli.dbeantools.api.migration.MigrationTool;
+import com.gufli.dbeantools.api.mock.MockBean;
 import io.ebean.annotation.Platform;
-import io.ebean.config.DatabaseConfig;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.HashSet;
-import java.util.Set;
+import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,18 +18,15 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DatabaseContextTests {
 
     private static AbstractDatabaseContext databaseContext;
-    private static Set<Class<?>> classes = new HashSet<>();
 
     private static File tempdir;
 
     @BeforeAll
-    public static void init() {
-        classes.add(TestBean.class);
-
+    public static void init() throws SQLException {
         databaseContext = new AbstractDatabaseContext("TestDatabase") {
             @Override
             public Class<?>[] classes() {
-                return classes.toArray(Class[]::new);
+                return new Class[] { MockBean.class };
             }
         };
 
@@ -57,10 +53,8 @@ public class DatabaseContextTests {
     @Test
     @Order(1)
     public void generateMigrationFiles() throws IOException {
-        MigrationGenerator generator = new MigrationGenerator("TestDatabase",
-                tempdir.toPath().toString(), Platform.H2);
-        classes.forEach(generator::addClass);
-        generator.generate();
+        MigrationTool tool = new MigrationTool(databaseContext, tempdir.toPath().toString(), Platform.H2);
+        tool.generate();
 
         File[] files = new File(tempdir, "migrations/model").listFiles();
         assertNotNull(files);

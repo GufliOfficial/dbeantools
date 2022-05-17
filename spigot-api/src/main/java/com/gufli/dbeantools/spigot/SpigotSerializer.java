@@ -1,19 +1,19 @@
-package com.gufli.dbeantools.bukkit;
+package com.gufli.dbeantools.spigot;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
-import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.util.Base64;
 
 /**
  * A class that serializes and deserializes {@link ConfigurationSerializable} objects.
  */
-public class BukkitSerializer {
+public class SpigotSerializer {
 
 
     public static <T extends ConfigurationSerializable> String encodeObject(T object) throws IOException {
@@ -23,13 +23,13 @@ public class BukkitSerializer {
         ) {
             dataOutput.writeObject(object);
             dataOutput.close();
-            return Base64Coder.encodeLines(outputStream.toByteArray());
+            return Base64.getEncoder().encodeToString(outputStream.toByteArray());
         }
     }
 
     public static <T extends ConfigurationSerializable> T decodeObject(Class<T> type, String base64) throws IOException, ClassNotFoundException {
         try (
-                ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(base64));
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64.getDecoder().decode(base64));
                 BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
         ) {
             T object = (T) dataInput.readObject();
@@ -48,13 +48,13 @@ public class BukkitSerializer {
                 dataOutput.writeObject(t);
             }
             dataOutput.close();
-            return Base64Coder.encodeLines(outputStream.toByteArray());
+            return Base64.getEncoder().encodeToString(outputStream.toByteArray());
         }
     }
 
     public static <T extends ConfigurationSerializable> T[] decodeArray(Class<T> type, String base64) throws IOException, ClassNotFoundException {
         try (
-                ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(base64));
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64.getDecoder().decode(base64));
                 BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
         ) {
             T[] items = (T[]) Array.newInstance(type, dataInput.readInt());

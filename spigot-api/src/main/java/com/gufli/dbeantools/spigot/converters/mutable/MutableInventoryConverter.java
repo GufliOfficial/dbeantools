@@ -1,7 +1,7 @@
-package com.gufli.dbeantools.bukkit.converters.mutable;
+package com.gufli.dbeantools.spigot.converters.mutable;
 
 import com.gufli.dbeantools.api.value.MutableDatabaseValueConverter;
-import com.gufli.dbeantools.bukkit.converters.InventoryConverter;
+import com.gufli.dbeantools.spigot.converters.InventoryConverter;
 import org.bukkit.inventory.Inventory;
 
 public class MutableInventoryConverter extends MutableDatabaseValueConverter<Inventory> {

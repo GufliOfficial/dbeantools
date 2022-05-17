@@ -1,5 +1,6 @@
-package com.gufli.dbeantools.api;
+package com.gufli.dbeantools.api.mock;
 
+import com.gufli.dbeantools.api.BaseModel;
 import io.ebean.Model;
 import io.ebean.annotation.DbName;
 
@@ -10,13 +11,13 @@ import java.util.UUID;
 
 @Entity
 @DbName("TestDatabase")
-@Table(name = "test_beans")
-public class TestBean extends Model implements BaseModel {
+@Table(name = "mock_beans")
+public class MockBean extends Model implements BaseModel {
 
     @Id
     private UUID id;
 
-    public TestBean() {
+    public MockBean() {
         super("TestDatabase");
     }
 

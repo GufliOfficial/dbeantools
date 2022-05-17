@@ -1,4 +1,4 @@
-package com.gufli.dbeantools.bukkit.converters;
+package com.gufli.dbeantools.spigot.converters;
 
 import org.bukkit.inventory.ItemStack;
 

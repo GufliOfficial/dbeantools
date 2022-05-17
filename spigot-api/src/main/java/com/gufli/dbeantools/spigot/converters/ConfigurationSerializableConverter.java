@@ -1,6 +1,6 @@
-package com.gufli.dbeantools.bukkit.converters;
+package com.gufli.dbeantools.spigot.converters;
 
-import com.gufli.dbeantools.bukkit.BukkitSerializer;
+import com.gufli.dbeantools.spigot.SpigotSerializer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import javax.persistence.AttributeConverter;
@@ -16,7 +16,7 @@ public abstract class ConfigurationSerializableConverter<T extends Configuration
     @Override
     public String convertToDatabaseColumn(T attribute) {
         try {
-            return BukkitSerializer.encodeObject(attribute);
+            return SpigotSerializer.encodeObject(attribute);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -26,7 +26,7 @@ public abstract class ConfigurationSerializableConverter<T extends Configuration
     @Override
     public T convertToEntityAttribute(String dbData) {
         try {
-            return BukkitSerializer.decodeObject(type, dbData);
+            return SpigotSerializer.decodeObject(type, dbData);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

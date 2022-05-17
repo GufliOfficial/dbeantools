@@ -1,18 +1,32 @@
 plugins {
-    id('io.ebean') version '13.+'
+    id 'io.ebean' version '13.+'
 }
 
 dependencies {
-    api 'io.ebean:ebean:13.+'
+
+    // ebean api
+    api 'io.ebean:ebean-api:13.+'
     api 'io.ebean:ebean-ddl-generator:13.+'
     api 'io.ebean:ebean-querybean:13.+'
-    api 'org.slf4j:slf4j-api:1.+' // required since ebean 13
 
-    runtimeOnly 'com.h2database:h2:2.+'
+    // runtime dependencies
+    runtimeOnly 'io.ebean:ebean-core:13.+'
+    runtimeOnly 'io.ebean:ebean-datasource:8.+'
+
+    runtimeOnly 'org.slf4j:slf4j-api:1.+'
     runtimeOnly 'org.glassfish.jaxb:jaxb-runtime:2.+'
+
 
     // TEST
 
+    testRuntimeOnly 'io.ebean:ebean-platform-mysql:13.+'
+    testRuntimeOnly 'mysql:mysql-connector-java:8.+'
+
+    // h2 database platform
+    testRuntimeOnly 'com.h2database:h2:2.+'
+    testRuntimeOnly 'io.ebean:ebean-platform-h2:13.+'
+
+    // jupiter
     testCompileOnly 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
